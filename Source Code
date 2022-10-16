@@ -1,0 +1,317 @@
+# Library Management Application
+# Import modules
+
+import math as mt
+import matplotlib.pyplot as plt
+import random as rn
+import io
+import cmath as cmt
+from functools import partial
+from datetime import datetime  
+from datetime import timedelta  
+from tkinter import *
+from PIL import ImageTk
+from tkinter import messagebox
+import pandas as pd
+import csv
+import numpy as np
+import time
+
+
+
+#Login Window
+
+
+class Login:
+    def __init__(self,root):
+        self.root = root
+        self.root.title("Library Management System: Login Window")
+        self.root.geometry("500x750+100+50")
+        self.root.resizable(False,False)
+        
+        self.bg = ImageTk.PhotoImage(file="C:/Users/user/libimage4.jpeg")
+        self.bg_image = Label(self.root,image = self.bg).place(x=0 , y=0 , relwidth=1 , relheight=1)
+        
+        Frame_login = Frame(self.root,bg="lightblue")
+        Frame_login.place(x=0 , y=100 , height=400 , width=300)
+        
+        title = Label(Frame_login, text="Login Here", font=("Impact",24,"bold"),fg="#d77337",bg="white").place(x=90,y=30)
+        desc = Label(Frame_login, text="Library employee login", font=("Goudy old style",15,"bold"),fg="#d25d17",bg="white").place(x=90,y=100)
+        lbl_user = Label(Frame_login, text="Username", font=("Impact",15),fg="red",bg="white").place(x=90,y=140)
+        self.txt_user = Entry(Frame_login,font=("times new roman",15),bg="lightgray")
+        self.txt_user.place(x=90,y=170)
+        
+        lbl_pass = Label(Frame_login, text="Password", font=("Impact",15),fg="red",bg="white").place(x=90,y=200)
+        self.txt_pass = Entry(Frame_login,font=("times new roman",15),bg="lightgray")
+        self.txt_pass.place(x=90,y=240) 
+        
+        
+        forget_btn = Button(Frame_login,text="Forgot Password",bg="white",fg="#d77337",font=("times new roman",15)).place(x=20,y=270)
+        login_btn =  forget = Button(Frame_login,command=self.login_function,text="Login",bg="white",fg="#d77337",font=("times new roman",15)).place(x=210,y=270)
+        
+        
+    def login_function(self):
+        if self.txt_user.get() =="" or self.txt_pass.get() =="":
+            messagebox.showerror("Error","All fields are mandatory",parent=self.root)
+        elif self.txt_user.get() != "Guest" or self.txt_pass.get() != "1234":
+            messagebox.showerror("Error","In-valid Username or Password",parent=self.root)
+        else:
+            messagebox.showinfo("Acess Granted","Login approved",parent=self.root)
+            messagebox.showinfo("Welcome","Dear User, pls click on the exit button to continue",parent=self.root)
+            
+            
+root = Tk()
+obj = Login(root)
+root.mainloop()
+
+
+# otp-service
+str9="A & S online Library Management Systems..."+"\n"
+for i in str9:
+    print(i,end='')
+    time.sleep(0.1)              
+Range_otp = range(10000,99999)
+otp_given = rn.choice(Range_otp)
+print("Your OTP is:",otp_given)
+k = 0
+while k < 300 :
+    otp_input = int(input("Enter the otp: "))
+    if otp_input == otp_given:
+        print("Valid OTP !!!")
+        break
+    else:
+        print("In-valid OTP...")
+        k = k + 1
+        continue
+    
+# Main program module
+print("----------------------------------------------------------------------------------------------------------------------------------------")
+print("The following options are available")
+options = ["1:Show all books" , "2:Delete a Book" , "3:Add a book" , "4:Issue a Book" , "5:Compare the relative number of issues per year" , "6:Show Issued Books" , "7:Return a Book" , "8:View the Members", "9:Add a member" , "10:Delete a member" , "11:Exit"]
+option_id = [1,2,3,4,5,6,7,8,9,10,11]
+for i in options:
+    print(i)
+    
+while 1>0:
+    user_choice = int(input("Enter your choice: "))
+    print("----------------------------------------------------------------------------------------------------------------------------------------")
+    if user_choice in option_id:
+        
+
+# options included
+# Main code
+
+        if user_choice == 1:
+            def showallbooks():
+                pdf = pd.read_csv(r"C:/Users/user/book database.csv")
+                pdf1 = pd.DataFrame(pdf)
+                print(pdf1)
+            showallbooks()
+            continue
+           
+            
+    
+        if user_choice == 2:
+            print("So you have selected to delete a Book...")
+            def deletebook():
+                BookID = int(input("Enter a book ID: "))
+                bdf = pd.read_csv(r"C:/Users/user/book database.csv")
+                bdf = bdf.drop(bdf[bdf["BookID"] == BookID].index)
+                bdf.to_csv(r"C:/Users/user/book database.csv", index=False)
+                print("Book deleted successfully")
+                print(bdf)
+           
+            deletebook()
+            continue
+            
+            
+           
+               
+        
+        if user_choice == 3:
+            print("So you want to add books...")
+            def addnewbook():
+                BookID = int(input("Enter a book ID: "))
+                title = input("Enter the book title: ")
+                author = input("Enter the name of the author: ")
+                publisher = input("Enter the name of the publisher: ")
+                edition = input("Enter the edition of the book: ")
+                category = input("Enter the category of the book: ")
+                bdf = pd.read_csv(r"C:/Users/user/book database.csv")
+                n = bdf["BookID"].count()
+                bdf.at[n] = [BookID,title,author,publisher,edition,category]
+                bdf.to_csv(r"C:/Users/user/book database.csv", index=False)
+                print("Book added successfully")
+                print(bdf)
+
+           
+            addnewbook()
+            continue
+            
+            
+           
+            
+            
+        if user_choice == 4:
+            print("So you have selected to issue a Book")
+            def issueabook():
+                Title = input("Enter the name of the Book: ")
+                bdf = pd.read_csv(r"C:/Users/user/book database.csv")
+                bdf = bdf.loc[bdf["Title"] == Title]
+                if bdf.empty:
+                    print("No such Book is there")
+                else:
+                    print("--------------------------------------------------------------------------------------------------------------------------")
+                    print("System Generated Reicipt (Online Library Application)")
+                
+                    print("User:","Guest")
+                    print("UserID:","1234")
+                
+                    print("You have borrowed the follwing Book:")
+                    print(Title)                
+                
+                    print("Number of Permissible days: 2 Weeks")
+                    print("Rate of Penalty upon delay: $.5.00 per day")
+                    x = datetime.now()
+                    y = x + timedelta(days=14) 
+                    print("Date of Issue:",x)
+                    print("Date of Return:",y)
+                    print("--------------------------------------------------------------------------------------------------------------------------")
+                    print("THANK YOU FOR VISITING")
+                    print("HAVE A NICE DAY !!!")
+            
+          
+            issueabook()
+            continue
+            
+            
+   
+
+
+
+
+
+
+        if user_choice == 5:
+            def graphplotter():
+                print("So you have chosen to view the statistics portion...")
+                book_name = input("Enter the name of the Book: ")
+                bdf = pd.read_csv(r"C:/Users/user/book database.csv")
+                bdf = bdf.loc[bdf["Title"] == book_name]
+                if bdf.empty:
+                    print("No such Book is there")
+                else:
+                    
+                    y1 = np.array([2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022])
+                    x = [100,200,300,400,500,500,700,800,900,1000,1100,1200,1300,1400,1500]
+                    x1 = []
+                    
+                    i = 0
+                    while i < 13:
+                        j = rn.choice(x)
+                        x1.append(j)
+                        i += 1
+                    x2 = np.array(x1)    
+                    plt.xlabel('Years')
+                    plt.ylabel('Number of Issues')
+                    plt.title("Comparison of issues in the Book")
+                    bars = plt.bar(y1,x2)
+                    patterns = ['/', 'O', '*']
+                    p = rn.choice(patterns)
+                    for bar in bars:
+                        bar.set_hatch(p)
+                    plt.show()            
+                   
+            
+            
+            graphplotter()
+            continue
+           
+        
+        
+        if user_choice == 6:
+            def showissuedbooks():
+                pdf = pd.read_csv(r"C:/Users/user/Books1.csv")
+                pdf1 = pd.DataFrame(pdf)
+                print(pdf1)
+                
+           
+            showissuedbooks()
+            continue
+           
+        
+        if user_choice == 7:
+            print("So you want to return books...")
+            def returnabook():
+                BookID = int(input("Enter a book ID: "))
+                title = input("Enter the book title: ")
+                author = input("Enter the name of the author: ")
+                publisher = input("Enter the name of the publisher: ")
+                edition = input("Enter the edition of the book: ")
+                category = input("Enter the category of the book: ")
+                bdf = pd.read_csv(r"C:/Users/user/book database.csv")
+                n = bdf["BookID"].count()
+                bdf.at[n] = [BookID,title,author,publisher,edition,category]
+                bdf.to_csv(r"C:/Users/user/book database.csv", index=False)
+                print("Book returned successfully")
+                print(bdf)
+            
+           
+            returnabook()
+            continue
+           
+           
+        
+        
+        if user_choice == 8:
+            print("So you want to view the members.....")
+            def showmembers():
+                adf = pd.read_csv(r"C:/Users/user/User.csv")
+                adf1 = pd.DataFrame(adf)
+                print(adf1)
+                
+           
+            showmembers()
+            continue
+          
+        
+        if user_choice == 9:
+            print("So you want to add members....")
+            def addmembers():
+                UserID = int(input("Enter a user ID: "))
+                User = input("Enter the user name: ")
+                Type = input("Enter the type(Regular or Premium): ")
+                Status = input("Enter the current status of the user: ")
+                bdf3 = pd.read_csv(r"C:/Users/user/User.csv")
+                n = bdf3["UserID"].count()
+                bdf3.at[n] = [UserID,User,Type,Status]
+                bdf3.to_csv(r"C:/Users/user/User.csv", index=False)
+                print("Member added successfully")
+                print(bdf3)
+           
+            addmembers()
+            continue
+            
+            
+        
+        
+        if user_choice == 10:
+            print("So you want to delete members....")
+            def deletemem():
+                UserID = int(input("Enter the User ID: "))
+                bdf6 = pd.read_csv(r"C:/Users/user/User.csv")
+                bdf6 = bdf6.drop(bdf6[bdf6["UserID"] == UserID].index)
+                bdf6.to_csv(r"C:/Users/user/User.csv", index=False)
+                print("Member deleted successfully")
+                print(bdf6)
+            
+           
+            deletemem()
+            continue
+                     
+        
+        if user_choice == 11:
+            print("Program Terminated")
+    print("Thank You and Have a nice Day !!!!")
+    break
+
